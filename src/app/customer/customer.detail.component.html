@@ -1,0 +1,259 @@
+<section>
+        <div class="container">
+            <div class="row shortRow">&nbsp;</div>
+            <div class="row" style="border-bottom: inset 1px gray;">
+                <div class="col-sm-12">
+                    <h2>
+                        Customer detail
+                    </h2>
+                </div>
+            </div>            
+            <div class="row shortRow">&nbsp;</div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h4>All fields marked with <span class="red">*</span> sign are mandatory</h4>
+                </div>
+            </div>
+            <div class="alert alert-danger alert-dismissible custom-alert-on-popup" role="alert" *ngIf="customerInvalidFieldsError || customerSaveError || customerInvalidDOBError">
+                    <div class="col-lg-12">
+                        <h5 class="alert-heading">
+                            <span class="glyphicon glyphicon-remove-sign"></span>
+                            Following error(s) occurred while trying to save.
+                        </h5>
+                    </div>
+                    <div class="row shortRow"></div>
+                    <div class="col-sm-12">
+                    
+                        <ul >
+                            <li *ngIf="customerSaveError">{{customerSaveErrorMessage}}</li>
+                            <li *ngIf="customerInvalidFieldsError">Please provide First name and Last name.</li>
+                            <li *ngIf="customerInvalidDOBError">Please provide valid date of birth.</li>
+                            
+                        </ul>                             
+                    </div>
+                    <div class="row shortRow">&nbsp;</div>
+                </div>                
+
+            <div class="row shortRow">&nbsp;</div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-2 form-control-caption">
+                        <img src="{{imageSrc}} " height="250" weight="250" alt="Profile Image ..." />
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="usr">Upload your new photo(Optional):</label>
+                    </div>
+                    <div class="col-sm-2 form-control-caption">
+    
+                    </div>
+                    <div class="col-sm-4">
+    
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="file" accept=".jpg,.png,.jpeg" (change)="attachFile($event)">
+                        </div>
+                        <div class="col-sm-2 form-control-caption">
+    
+                        </div>
+                        <div class="col-sm-4">
+    
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="firstName">First Name <span class="red">*</span></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="firstName" name="firstName" class="form-control full-width"
+                                   [(ngModel)]="customerDetail.FirstName"/>
+                        </div>
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="lastName">Last Name<span class="red">*</span></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="lastName" name="lastName" class="form-control full-width"
+                                   [(ngModel)]="customerDetail.LastName" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="mobileNum">Mobile Number</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="mobileNum" name="mobileNum" class="form-control full-width"
+                                   [(ngModel)]="customerDetail.MobileNumber" />
+                        </div>
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="dateOfBirth">Date of Birth</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <my-date-picker [options]="myDatePickerOptions" name="dateOfBirth" id=dateOfBirth
+                                            [(ngModel)]="customerDOB"></my-date-picker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="row" *ngIf="!isAddingNewAddress">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-4 pull-right text-right">
+                            <button class="btn btn-info" (click)="addAddress()"><span class="fa fa-plus-circle"></span> Add Address</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="customerDetail.Addresses.length > 0">
+                    <div class="table-responsive col-md-12">
+                        <table class="table table-condensed table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <td style="width:1%"></td>
+                                    <td style="width:1%"></td>
+                                    <td style="width:17%">Address</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let address of customerDetail.Addresses">
+                                    <td>
+                                        <span class="glyphicon glyphicon-pencil hand" (click)="editAddress(address)" style="float:left; width: 16px;">
+                                            &nbsp;
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="glyphicon glyphicon-trash hand" (click)="confirmPlanDeletion(address)" style="float: left; width: 16px;">
+                                            &nbsp;
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{address.AddressLine1}} {{address.AddressLine2}} {{address.Suburb}} {{address.City}} {{address.PostCode}}
+    
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="isAddingNewAddress">
+                    <div class="alert alert-danger alert-dismissible custom-alert-on-popup" role="alert" *ngIf="addressHasError">
+                            <div class="col-lg-12">
+                                <h5 class="alert-heading">
+                                    <span class="glyphicon glyphicon-remove-sign"></span>
+                                    Following error(s) occurred while trying to save.
+                                </h5>
+                            </div>
+                            <div class="row shortRow"></div>
+                            <div class="col-sm-12">
+                            
+                                <ul >
+                                    <li >Please provide Address line 1 and City</li>
+                                </ul>                             
+                            </div>
+                            <div class="row shortRow">&nbsp;</div>
+                        </div>                
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="addressLine1">Address Line 1<span class="red">*</span></label>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" id="addressLine1" name="addressLine1" class="form-control full-width"
+                                   [(ngModel)]="addressDetail.AddressLine1" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="addressLine2">Address Line 2 </label>
+                        </div>
+                        <div class="col-sm-10">
+                            <input type="text" id="addressLine2" name="addressLine2" class="form-control full-width"
+                                   [(ngModel)]="addressDetail.AddressLine2" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="suburb">Suburb</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="suburb" name="suburb" class="form-control full-width" [(ngModel)]="addressDetail.Suburb" />
+                        </div>
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="postCode">Postcode</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="postCode" name="postCode" class="form-control full-width" [(ngModel)]="addressDetail.PostCode" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-2 form-control-caption">
+                            <label for="city">City<span class="red">*</span></label>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" id="city" name="city" class="form-control full-width" [(ngModel)]="addressDetail.City" />
+                        </div>
+                        <div class="col-sm-6 form-control-caption">
+                            <div class="col-sm-6">
+                                <button class="btn btn-success full-width pull-right" (click)="addAddressToCustomer()">
+                                    <span class="glyphicon glyphicon-ok-circle"></span> Save Address
+                                </button>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" class="btn btn-danger full-width pull-right" (click)="backToAddressList()">
+                                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row shortRow">&nbsp;</div>
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row shortRow">&nbsp;</div>
+        <div class="row shortRow">&nbsp;</div>
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                <div class="col-sm-6">
+                    <button class="btn btn-success full-width pull-right" (click)="saveCustomer()">
+                        <span class="glyphicon glyphicon-ok-circle"></span> Save
+                    </button>
+                </div>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-danger full-width pull-right" (click)="backToList()">
+                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>        
+    </section>

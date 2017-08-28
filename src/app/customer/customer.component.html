@@ -1,0 +1,60 @@
+<section>
+<div class="row">
+    <div class="row">
+        <h2>{{title}}</h2>
+    </div>
+</div>
+<div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-4 pull-right text-right">
+                <button class="btn btn-info" (click)="addCustomer(searchPOMAction)"><span class="fa fa-plus-circle"></span> Add Customer</button>
+            </div>
+        </div>
+    </div>
+<div class="row shortRow">&nbsp;</div>
+<div class="row">    
+    <div class="col-sm-12">
+        <input type="text" 
+        #myInput placeholder="find customer by first or last name..." 
+        [(ngModel)]="searchName" (input)="filterItem(myInput.value)"
+         class="form-control full-width" id="planName" name="planName" [maxLength]="255" />
+    </div>
+</div>
+<div class="row">
+    <div class="table-responsive col-md-12" >
+    <table class="table table-condensed table-bordered table-striped">        
+            <thead>
+                    <tr>
+                        <td style="width:1%"></td>                        
+                        <td style="width:17%">First Name</td>
+                        <td style="width:17%">Last Name</td>
+                        <td style="width:11%">DOB</td>
+                        <td style="width:12%">Mobile Number</td>
+                        <td style="width:41%">Address</td>
+                    </tr>
+                </thead>
+        <tbody>
+            <tr *ngFor="let customer of customersfiltered" >
+                    <td >
+                        <span class="glyphicon glyphicon-pencil hand" (click)="editCustomer(customer)" style="float:left; width: 16px;">
+                                &nbsp;
+                            </span>
+                    </td>
+                    <td>{{customer.FirstName}}</td>
+                    <td>{{customer.LastName}}</td>
+                    <td>{{customer.DOB | date: "dd/MM/yy"}}</td>
+                    <td>{{customer.MobileNumber}}</td>
+                    <td >
+                        <div  *ngFor="let address of customer.Addresses">
+                            <b>(</b>                            
+                                {{address.AddressLine1}} {{address.AddressLine2}} {{address.Suburb}} {{address.City}} {{address.PostCode}}
+                                <b>)</b>
+                        </div>
+                        
+                    </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+</section>
